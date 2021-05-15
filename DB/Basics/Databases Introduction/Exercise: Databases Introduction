@@ -1,0 +1,95 @@
+--Problem 1-6
+CREATE DATABASE Minions
+
+CREATE TABLE Minions(
+Id INT PRIMARY KEY NOT NULL,
+[Name] NVARCHAR(50) NOT NULL,
+Age INT 
+)
+
+CREATE TABLE Towns(
+Id INT PRIMARY KEY NOT NULL,
+[Name] NVARCHAR(50) NOT NULL,
+)
+
+ALTER TABLE Minions
+ADD TownId INT FOREIGN KEY REFERENCES Towns(Id)
+
+INSERT INTO Towns VALUES
+(1, 'Sofia'),
+(2, 'Plovdiv'),
+(3,'Varna')
+
+INSERT INTO Minions 
+VALUES
+(1,'Kevin',22,1),
+(2,'Bob',15,3),
+(3,'Steward',NULL,2)
+
+--Problem 7
+CREATE TABLE People
+(
+Id INT PRIMARY KEY IDENTITY NOT NULL,
+[Name] NVARCHAR(200) NOT NULL,
+Picture VARBINARY,
+Height DECIMAL(3,2),
+[Weight] DECIMAL(5,2),
+Gender CHAR(1) NOT NULL,
+Birthdate DATE NOT NULL,
+Biography NVARCHAR(MAX)
+)
+
+INSERT INTO People VALUES
+('Marche4',2.33,2.36,NULL,'f','02.12.1985','maika'),
+('Taq',2.33,2.36,NULL,'f','02.13.1985','maika'),
+('Maq',2.33,2.36,NULL,'f','02.16.1985','maika'),
+('Kaq',3.45,2.86,NULL,'f','03.17.2021','sestra'),
+('Sisi',5.06,6.15,NULL,'f','06.15.2001','sestra')
+
+--Problem 8
+CREATE TABLE Users
+(
+Id INT PRIMARY KEY IDENTITY NOT NULL,
+Username VARCHAR(30) UNIQUE NOT NULL,
+[Password] VARCHAR(26) NOT NULL,
+[Profilepicture] VARBINARY(MAX)
+CHECK(DATALENGTH(ProfilePicture)<=900*1024),
+LastLoginTime DATETIME2 NOT NULL,
+IsDeleted BIT NOT NULL
+)
+INSERT INTO Users VALUES
+('Marche4',123456,NULL,'02.12.1985',0),
+('Taq',233236,NULL,'02.13.1985',0),
+('Maq',2332736,NULL,'02.16.1985',1),
+('Kaq',3745286,NULL,'03.17.2021',0),
+('Sisi',506615,NULL,'06.15.2001',0)
+
+--Problem 9
+ALTER TABLE Users 
+DROP CONSTRAINT [PK__Users__3214EC0748446341]
+
+ALTER TABLE Users	
+ADD CONSTRAINT PK_Users_CompositeIdUserName
+PRIMARY KEY(Id,Username)
+
+--Problem 10
+ALTER TABLE Users
+ADD CONSTRAINT CK_Users_PasswordLength
+CHECK (LEN([Password])>=5)
+
+-- Problem 11
+ALTER TABLE Users
+ADD CONSTRAINT DF_LastLoginTime
+DEFAULT GETDATE() FOR LastLoginTime
+
+--Problem 12
+ALTER TABLE Users 
+DROP CONSTRAINT PK_Users_CompositeIdUserName
+
+ALTER TABLE Users 
+ADD CONSTRAINT PK_Users_Id
+PRIMARY KEY(Id)
+
+ALTER TABLE Users
+ADD CONSTRAINT CK_UsernameLength
+CHECK (LEN(Username)>=3)
