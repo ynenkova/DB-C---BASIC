@@ -1,43 +1,64 @@
 ﻿using System;
 using System.Linq;
-namespace _3._Maximal_Sum
+using System.Collections.Generic;
+namespace _4._Matrix_Shuffling
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var dimensions = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            var dimensions = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
             int n = dimensions[0];
             int m = dimensions[1];
-            var matrix = new int[n][];
-            for (int row = 0; row < matrix.GetLength(0); row++)
+            var matrix = new string[n][ ];
+            for (int row = 0; row < matrix.Length; row++)
             {
-                matrix[row] = Console.ReadLine().Split(" ",StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+               matrix[row] = Console.ReadLine().Split(' ').ToArray();
             }
-            int max = 0;
-            int maxRow = 0;
-            int maxCol = 0;
-            for (int row = 0; row < matrix.Length-2; row++)
+            while (true)
             {
-                for (int col = 0; col < matrix[row].Length-2; col++)
+                var command = Console.ReadLine().Split(' ');
+                if (command[0] == "END")
                 {
-                    int currentSum = matrix[row][ col] + matrix[row][col + 1] + matrix[row][ col + 2]+
-                                     matrix[row+1][col]+ matrix[row + 1][ col+1]+ matrix[row + 1][ col+2]+
-                                     matrix[row + 2][ col] + matrix[row + 2][ col + 1] + matrix[row + 2][ col + 2];
-                    if (currentSum>max)
+                    break;
+                }
+                string name = command[0];
+                if (name != "swap")
+                {
+                    Console.WriteLine("Invalid input!");
+                }
+                else
+                {
+                    int firstRow = int.Parse(command[1]);
+                    int firstCol = int.Parse(command[2]);
+                    int secondRow = int.Parse(command[3]);
+                    int secondCol = int.Parse(command[4]);
+                    if (name != "swap" || n <= firstRow ||
+                        n <= secondRow || m <= firstCol ||
+                        m <= secondCol || firstRow < 0 ||
+                        secondRow < 0 || firstCol < 0 ||
+                        secondCol < 0)
                     {
-                        max = currentSum;
-                        maxRow = row;
-                        maxCol = col;
+                        Console.WriteLine("Invalid input!");
+                    }
+                    else
+                    {
+                        string firts = matrix[firstRow][ firstCol];
+                        matrix[firstRow][firstCol] = matrix[secondRow][ secondCol];
+                        matrix[secondRow][ secondCol] = firts;
+                        PritMatrix(matrix);
                     }
                 }
             }
-            Console.WriteLine($"Sum = {max}");
-            for (int row = maxRow; row <= maxRow + 2; row++)
+        }
+        static void PritMatrix(string[][] matrix)
+        {
+            for (int row = 0; row < matrix.Length; row++)
             {
-                for (int col = maxCol; col <= maxCol + 2; col++)
+
+                for (int col = 0; col < matrix[row].Length; col++)
                 {
-                    Console.Write($"{matrix[row][col]} ");
+                    Console.Write(matrix[row][ col] + " ");
                 }
                 Console.WriteLine();
             }
