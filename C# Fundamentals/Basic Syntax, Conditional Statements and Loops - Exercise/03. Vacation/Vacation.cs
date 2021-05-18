@@ -1,84 +1,74 @@
 using System;
- 
-namespace Vacation
+
+namespace _5._Bomb_Numbers
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int groupNum = int.Parse(Console.ReadLine());
-            string typeGroup = Console.ReadLine();
-            string day = Console.ReadLine();
-            decimal price = 0;
-           
-            if (typeGroup == "Students")
+            int people = int.Parse(Console.ReadLine());
+            string type = Console.ReadLine();
+            string days = Console.ReadLine();
+            decimal pricePerson=0;
+            switch (type)
             {
-                if (day == "Friday")
-                {
-                    price = 8.45;
-                }
-                else if (day == "Saturday")
-                {
-                    price = 9.80;
-                }
-                else if (day == "Sunday")
-                {
-                    price = 10.46;
-                }
- 
+                case "Students":
+                    switch (days)
+                    {
+                        case "Friday":
+                            pricePerson = 8.45M;
+                            break;
+                        case "Saturday":
+                            pricePerson = 9.8M;
+                            break;
+                        case "Sunday":
+                            pricePerson = 10.46M;
+                            break;
+                    }
+                    break;
+                case "Business":
+                    switch (days)
+                    {
+                        case "Friday":
+                            pricePerson = 10.90M;
+                            break;
+                        case "Saturday":
+                            pricePerson = 15.60M;
+                            break;
+                        case "Sunday":
+                            pricePerson = 16;
+                            break;
+                    }
+                    break;
+                case "Regular":
+                    switch (days)
+                    {
+                        case "Friday":
+                            pricePerson = 15;
+                            break;
+                        case "Saturday":
+                            pricePerson = 20;
+                            break;
+                        case "Sunday":
+                            pricePerson = 22.5M;
+                            break;
+                    }
+                    break;
             }
-            else if (typeGroup == "Business")
+            decimal total = pricePerson * people;
+            if (type=="Students"&&people>=30)
             {
-                if (day == "Friday")
-                {
-                    price = 10.90;
-                }
-                else if (day == "Saturday")
-                {
-                    price = 15.60;
-                }
-                else if (day == "Sunday")
-                {
-                    price = 16;
-                }
- 
+                total = total * 0.85M;
             }
-            else if (typeGroup == "Regular")
+            if (type == "Business" && people >= 100)
             {
-                if (day == "Friday")
-                {
-                    price = 15;
-                }
-                else if (day == "Saturday")
-                {
-                    price = 20;
-                }
-                else if (day == "Sunday")
-                {
-                    price = 22.50;
-                }
+                total -= pricePerson * 10;
             }
- 
-            decimal totalPrice = groupNum * price;
-            decimal discounted = 0;
- 
-            if (typeGroup == "Regular" && groupNum >= 10 && groupNum <= 20)
+            if (type == "Regular" && people >= 10&&people<=20)
             {
-                discounted = totalPrice * 0.05;
- 
+                total=total*0.95M;
             }
-            else if (typeGroup == "Business" && groupNum >= 100)
-            {
-                discounted = 10 * price;
- 
-            }
-            else if (typeGroup == "Students" && groupNum >= 30)
-            {
-                discounted = totalPrice * 0.15;
- 
-            }
- 
-            Console.WriteLine($"Total price: {totalPrice - discounted:F2}");
+            Console.WriteLine($"Total price: {total:f2}");
         }
     }
 }
