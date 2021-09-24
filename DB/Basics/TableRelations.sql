@@ -93,23 +93,12 @@ SELECT*FROM Exams
 SELECT*FROM StudentsExams
 
 --PROBLEM 4
-CREATE TABLE Teachers
+CREATE TABLE Teachers 
 (
-TeacherID INT NOT NULL,
-[Name] NVARCHAR(100) NOT NULL,
-ManagerID INT ,
-CONSTRAINT PK_Teachers PRIMARY KEY(TeacherID),
-CONSTRAINT FC_ManagerID FOREIGN KEY(ManagerID) REFERENCES Teachers(TeacherID)
+	TeacherID INT PRIMARY KEY, 
+	[Name] NVARCHAR(50) NOT NULL,
+	ManagerID INT FOREIGN KEY REFERENCES Teachers (TeacherID)
 )
-INSERT INTO Teachers
-VALUES
-(101,'John',NULL),
-(102,'Maya',106),
-(103,'Silvia',106),
-(104,'Ted',105),
-(105,'Mark',101),
-(106,'Greta',101)
-DROP TABLE Teachers
 
 --PROBLEM 5
 CREATE DATABASE OnlineStore 
@@ -156,5 +145,48 @@ CONSTRAINT FK_Orders FOREIGN KEY(OrderID) REFERENCES Orders(OrderID),
 CONSTRAINT FK_Items FOREIGN KEY (ItemID) REFERENCES Items(ItemID)
 )
 
+--Problem 6
 
+CREATE DATABASE	University 
+
+CREATE TABLE Majors
+(
+MajorID INT PRIMARY KEY IDENTITY,
+[Name] NVARCHAR(50) NOT NULL
+)
+
+CREATE TABLE Students
+(
+StudentID INT PRIMARY KEY IDENTITY,
+StudentNumber INT,
+StudentName NVARCHAR(100) NOT NULL,
+MajorID INT FOREIGN KEY REFERENCES Majors(MajorID)
+)
+
+CREATE TABLE Payments 
+(
+	PaymentID INT PRIMARY KEY IDENTITY,
+	PaymentDate DATE NOT NULL,
+	PaymentAccount DECIMAL (15, 2) NOT NULL,
+	StudentID INT FOREIGN KEY REFERENCES Students (StudentID)
+	)
+CREATE TABLE Subjects
+(
+SubjectID INT PRIMARY KEY IDENTITY,
+SubjectName NVARCHAR(50) NOT NULL
+)
+
+CREATE TABLE Agenda 
+(
+	StudentID INT FOREIGN KEY REFERENCES Students (StudentID),
+	SubjectID INT FOREIGN KEY REFERENCES Subjects (SubjectID),
+
+	PRIMARY KEY (StudentID, SubjectID)
+)
+--Problem 9
+SELECT m.MountainRange, p.PeakName, p.Elevation 
+FROM Mountains AS m
+JOIN Peaks AS p ON p.MountainId = m.Id
+WHERE m.MountainRange = 'Rila'
+ORDER BY p.Elevation DESC
 
