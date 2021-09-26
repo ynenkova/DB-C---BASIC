@@ -113,6 +113,13 @@ END AS [Duration]
 FROM Games
 ORDER BY [Name],[Duration],[Part of the Day]
 
+--Problem 18
+SELECT 
+    ProductName,
+	OrderDate,
+	DATEADD(DAY, 3, OrderDate) AS [Pay Due],
+	DATEADD(MONTH, 1, OrderDate) AS [Pay Due] 
+FROM Orders
 
 		
 	 
