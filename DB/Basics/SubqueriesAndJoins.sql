@@ -10,10 +10,10 @@ JOIN Towns ON Addresses.TownID=Towns.TownID)
 ORDER BY FirstName,LastName
 
 --Problem 3
-SELECT Employees.EmployeeID,Employees.FirstName,Employees.LastName,Departments.Name FROM Employees
-JOIN Departments ON Employees.DepartmentID=Departments.DepartmentID
-WHERE Departments.DepartmentID='Sales'
-ORDER BY Employees.EmployeeID
+SELECT e.EmployeeID,e.FirstName,e.LastName,d.Name AS DepartmentName FROM Employees AS e
+JOIN Departments AS d On d.DepartmentID=e.DepartmentID
+WHERE d.Name='Sales'
+ORDER BY e.EmployeeID
 
 --Problem 4
 SELECT TOP(5)Employees.EmployeeID,Employees.FirstName,Employees.Salary,Departments.Name FROM Employees
@@ -44,7 +44,7 @@ ORDER BY e.EmployeeID
 
 --Problem 8
 SELECT e.EmployeeID,e.FirstName,CASE
-WHEN p.StartDate>'2005'
+WHEN p.StartDate>='2005'
 THEN 'NULL'
 ELSE p.Name
 END AS ProjectName
@@ -113,8 +113,42 @@ LEFT JOIN Rivers AS r ON r.Id=cr.RiverId
 WHERE con.ContinentName ='Africa' 
 
 ORDER BY c.CountryName
+--Problem 15
+SELECT ContinentCode,CurrencyCode,CurrencyUsage 
 
+FROM(
+
+SELECT ContinentCode,
+CurrencyCode ,
+  COUNT(CurrencyCode) AS [CurrencyUsage],
+ DENSE_RANK() OVER (PARTITION BY ContinentCode ORDER BY COUNT(CurrencyCode) DESC)
+AS Ranked
+FROM
+Countries 
+  GROUP BY ContinentCode, CurrencyCode
+
+) AS k
+  WHERE k.Ranked=1 AND k.CurrencyUsage>1
+    ORDER BY K.ContinentCode
+    
 --Problem 16
 SELECT  COUNT(c.CountryCode) AS [Count] FROM Countries AS c
 LEFT OUTER JOIN MountainsCountries AS mc ON c.CountryCode=mc.CountryCode
 WHERE mc.CountryCode IS NULL
+
+--Problem 17
+SELECT TOP 5 c.CountryName, 
+	   MAX(p.Elevation) AS [HighestPeakElevation], 
+	   MAX(r.Length) AS [LongestRiverLength]
+FROM Countries AS c
+LEFT JOIN CountriesRivers AS cr ON cr.CountryCode = c.CountryCode
+LEFT JOIN Rivers AS r ON cr.RiverId = r.Id
+LEFT JOIN MountainsCountries AS mc ON mc.CountryCode = c.CountryCode
+LEFT JOIN Mountains AS m ON m.Id = mc.MountainId
+LEFT JOIN Peaks As p ON p.MountainId = m.Id
+GROUP BY c.CountryName
+ORDER BY [HighestPeakElevation] DESC,
+		[LongestRiverLength] DESC,
+		c.CountryName 
+              
+--Problem 18*              
