@@ -1,4 +1,4 @@
---1. Records’ Count
+--1. Recordsâ€™ Count
 SELECT COUNT(WizzardDeposits.Id) AS Count FROM WizzardDeposits
 
 --2. Longest Magic Wand
@@ -151,9 +151,11 @@ SELECT DepartmentID, AVG(Salary) AS [AverageSalary]
  GROUP BY DepartmentID
 
  --16. Employees Maximum Salaries
- SELECT DepartmentID,MAX(Salary) AS MaxSalary FROM Employees
- WHERE Salary NOT BETWEEN 30000 AND 70000
- GROUP BY DepartmentID
+ SELECT DepartmentID, 
+MAX(Salary) AS [Max Salary] 
+FROM Employees AS e
+GROUP BY e.DepartmentID
+HAVING MAX(e.Salary) NOT BETWEEN 30000 AND 70000
 
  --17. Employees Count Salaries
  SELECT COUNT(Salary) AS [Count] FROM Employees
