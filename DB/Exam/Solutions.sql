@@ -113,18 +113,18 @@ AND c.PriceForSingleCigar>50 OR  c.CigarName LIKE '%ci%'
 ORDER BY c.CigarName ASC,c.PriceForSingleCigar DESC
 
 --9
-SELECT c.FirstName+' '+c.LastName AS FullName,a.Country,a.ZIP
-,
-CONCAT('$',ci.PriceForSingleCigar) AS PriceForSingleCigar FROM Clients AS c
-LEFT JOIN ClientsCigars AS cc ON cc.ClientId=c.Id
-LEFT JOIN Cigars AS ci ON ci.Id=cc.CigarId
-LEFT JOIN Addresses AS a ON a.Id=c.AddressId
-WHERE a.ZIP NOT LIKE '%[^0-9]%' AND ci.PriceForSingleCigar=(SELECT MAX(ci.PriceForSingleCigar) FROM Cigars LEFT JOIN ClientsCigars AS cc ON cc.ClientId=c.Id
-LEFT JOIN Cigars AS ci ON ci.Id=cc.CigarId  )
-
-GROUP BY c.FirstName,c.LastName,a.Country,a.ZIP,ci.PriceForSingleCigar
-HAVING MAX(ci.PriceForSingleCigar)>=543.23
-ORDER BY FullName ASC
+SELECT
+	CONCAT(c.[FirstName], ' ', c.[LastName]) AS [FullName],
+	a.[Country],
+	a.[ZIP],
+	CONCAT('$', MAX(cg.[PriceForSingleCigar])) AS [CigarPrice]
+FROM [Clients] AS c
+	JOIN [Addresses] AS a ON c.[AddressId] = a.[Id]
+	JOIN [ClientsCigars] AS cc ON c.[Id] = cc.[ClientId]
+	JOIN [Cigars] AS cg ON cc.[CigarId] = cg.[Id]
+WHERE ISNUMERIC(a.[ZIP]) = 1
+GROUP BY c.[FirstName], c.[LastName], a.[Country], a.[ZIP]
+ORDER BY [FullName]
 
 --10
 SELECT c.LastName,AVG(s.Length) AS CiagrLength,CEILING(AVG(s.RingRange)) AS CiagrRingRange FROM Clients AS c
