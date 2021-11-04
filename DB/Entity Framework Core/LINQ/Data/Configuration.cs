@@ -3,6 +3,6 @@
    public static class Configuration
     {
         public static string ConnectionString =
-            @"Server=LAPTOP-EJ1MT1A4;Database=MusicHub;Trusted_Connection=True";
+            @"Server=.;Database=MusicHub;Trusted_Connection=True";
     }
 }
